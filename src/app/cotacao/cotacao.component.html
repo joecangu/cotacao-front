@@ -1,0 +1,106 @@
+<h1 class="mt-4">Cotação do Dólar</h1>
+<ol class="breadcrumb mb-4">
+  <li class="breadcrumb-item active">Histórico de Cotações</li>
+</ol>
+
+<!-- Card da cotação do dólar hoje -->
+<div class="row justify-content-end">
+  <div class="col-xl-3 col-md-6">
+    <div class="card bg-success text-white mb-4">
+      <div class="card-body">Cotação do Dolár Hoje:</div>
+      <div class="card-footer d-flex align-items-center justify-content-between">
+        <a class="text-white stretched-link">{{ dataAtual }}</a>
+        <div class="text-white">
+          <i class="fa fa-dollar-sign" *ngIf="cotacaoAtual !== undefined"></i>
+          {{ cotacaoAtual !== undefined ? cotacaoAtual : "Cotação não atualizada!"}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Conteúdo do formulário de pesquisa -->
+<div class="container">
+  <form #consultaForm="ngForm" (submit)="getCotacaoPorPeriodo(dataInicial.value, dataFinal.value)">
+    <div class="row">
+      <div class="col-md-6">
+        <label for="inputDataInicial">Data inicial: *</label>
+        <input type="date"
+          class="form-control"
+          id="inputDataInicial"
+          name="dataInicial"
+          #dataInicial
+          value="{{ dataInicialInput }}"
+          max="{{ dataFinalInput }}"
+        >
+      </div>
+      <div class="col-md-6">
+        <label for="inputDataFinal">Data final: *</label>
+        <input type="date"
+          class="form-control"
+          id="inputDataFinal"
+          name="dataFinal"
+          #dataFinal
+          value="{{ dataFinalInput }}"
+          max="{{ dataFinalInput }}"
+        >
+      </div>
+    </div>
+    <br/>
+    <div class="row">
+      <div class="col-md-3">
+        <button type="submit" class="btn btn-primary">
+          <i class="fa fa-search"></i>
+          Pesquisar
+        </button>
+      </div>
+      <div class="col-md-6">
+
+        <input
+          class="form-check-input"
+          type="checkbox"
+          value=""
+          id="menorCotacao"
+          [(ngModel)]="isChecked"
+          name="isChecked"
+        >
+        <label class="form-check-label" for="menorCotacao">
+          * Pesquisar por valor menor que a cotação atual
+        </label>
+
+      </div>
+    </div>
+    <br/>
+
+    <!-- div de mensagem de erro -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-danger" role="alert" *ngIf="erro == true">
+          {{ errors }}
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<br/>
+<!-- tabela -->
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-condensed table-hover">
+      <thead>
+        <tr>
+          <th class="col-md-4">Data</th>
+          <th class="col-md-4">Preço (R$)</th>
+          <th class="col-md-4">Diferença (R$)</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let item of cotacaoPorPeriodoLista">
+            <td>{{ item.data }} </td>
+            <td>{{ item.preco }}</td>
+            <td>{{ item.diferenca }}</td>
+          </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
